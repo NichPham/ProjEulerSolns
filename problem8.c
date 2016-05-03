@@ -1,3 +1,8 @@
+/* 
+* Find the thirteen adjacent digits in the 1000-digit number that have the 
+* greatest product. What is the value of this product?
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -29,21 +34,65 @@
  * Second optional argument is the number to parse over
  */
 int main(int argc, char** argv) {
-	char* num;
 	if (argc != 2 && argc != 3) {
 		printf("Usage: problem8 size [number]\n");
 		return 1;
 	}
+
+	int size = atoi(argv[1]);
+	char* num;
 	if (argc == 2) {
 		num = DEFAULT_NUMBER;
 	} else {
 		num = argv[2];
 	}
 
-	int i;
-	for(i = 0; i < 50; i++) {
-		printf("%c\n", num[i]);
+	if (size > strlen(num)) {
+		size = strlen(num);
 	}
+
+	//Load first subset
+	int i;
+	int prod = 1;
+	int maxprod;
+	int digit;
+	for(i = 0; i < size; i++) {
+		digit = num[i] - '0';
+		prod = prod * digit;
+	}
+	maxprod = prod;
+
+	// Iterate through rest of number
+	// Take current product divide out first digit in subset then multiply in next digit
+	// Keep track of zeroes as sets containing them are zero 
+	char* first = num;
+	int firstdigit;
+	int zerocount = 0;
+	for (i = size; i < strlen(num); i++) {
+		digit = num[i] - '0';
+		firstdigit = first[0] - '0';
+		if (firstdigit == 0) {
+			zerocount--;
+			firstdigit = 1;
+		} else if (zerocount > 0) {
+			firstdigit = 1; 
+		}
+
+		if (digit != 0) {
+			prod = (prod / firstdigit) * digit;
+		} else {
+			zerocount++;
+			prod = 1;
+		}
+
+		if (prod > maxprod) {
+			maxprod = prod;
+		}
+
+		first++;
+	}
+
+	printf("The greatest product of the %d adjacent digits in the number is %d\n", size, maxprod);
 
 	return 0;
 }
