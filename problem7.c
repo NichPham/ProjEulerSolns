@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 	if (argc != 2) { 
 		printf("Usage: problem7 number\n");
 		return 0;
-	} else if (isalpha(*argv[1]) != 0) {
+	} else if (isalpha(*argv[1])) {
 		printf("Input must be positive integer\n");
 		return 0;
 	}
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 	int n = 3;
 	while (seqnum < desired) {
 		n += 2;
-		if(primetest(n) == 1) {
+		if(primetest(n)) {
 			seqnum++;
 		}
 	}
